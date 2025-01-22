@@ -317,89 +317,89 @@ const EditDesignTemplate = () => {
     const greyValue = Math.floor(255 - a * (255 / 18));
     return `rgb(${greyValue}, ${greyValue}, ${greyValue})`;
   });
-  useEffect(() => {
-    selectedCoordinates.forEach((item) => {
-      const isQuestionField = item?.fieldType === "questionField";
-      const isFormField = item?.fieldType === "formField";
-      const template = dataCtx.allTemplates[0];
-      const layoutDetails = template.layoutParameters;
-      setSensitivity(layoutDetails.iSensitivity);
-      if (isQuestionField || isFormField) {
-        const template = dataCtx.allTemplates[data.templateIndex];
-        const parameters = isQuestionField
-          ? template[0].questionsWindowParameters
-          : template[0].formFieldWindowParameters;
-        const formattedSelectedFile = {
-          "End Col": item.endCol,
-          "End Row": item.endRow + 1,
-          "Start Col": item.startCol,
-          "Start Row": item.startRow + 1,
-          fieldType: item.fieldType,
-          name: item.name,
-        };
+  // useEffect(() => {
+  //   selectedCoordinates.forEach((item) => {
+  //     const isQuestionField = item?.fieldType === "questionField";
+  //     const isFormField = item?.fieldType === "formField";
+  //     const template = dataCtx.allTemplates[0];
+  //     const layoutDetails = template.layoutParameters;
+  //     setSensitivity(layoutDetails.iSensitivity);
+  //     if (isQuestionField || isFormField) {
+  //       const template = dataCtx.allTemplates[0];
+  //       const parameters = isQuestionField
+  //         ? template[0].questionsWindowParameters
+  //         : template[0].formFieldWindowParameters;
+  //       const formattedSelectedFile = {
+  //         "End Col": item.endCol,
+  //         "End Row": item.endRow + 1,
+  //         "Start Col": item.startCol,
+  //         "Start Row": item.startRow + 1,
+  //         fieldType: item.fieldType,
+  //         name: item.name,
+  //       };
 
-        // Find the index of the matched object
-        const index = parameters.findIndex((param) =>
-          isEqual(param.Coordinate, formattedSelectedFile)
-        );
+  //       // Find the index of the matched object
+  //       const index = parameters.findIndex((param) =>
+  //         isEqual(param.Coordinate, formattedSelectedFile)
+  //       );
 
-        // Get the matched object
-        const data2 = index !== -1 ? parameters[index] : null;
+  //       // Get the matched object
+  //       const data2 = index !== -1 ? parameters[index] : null;
 
-        if (data2) {
-          // Determine the reading direction
-          let readingDirection = "rightToLeft";
-          const directionMapping = {
-            0: "topToBottom",
-            1: "topToBottom",
-            2: "bottomToTop",
-            3: "bottomToTop",
-            4: "leftToRight",
-            5: "rightToLeft",
-            6: "leftToRight",
-            7: "rightToLeft",
-          };
-          readingDirection =
-            directionMapping[data2.iDirection] || "rightToLeft";
-          // if (layoutDetails.dataReadDirection === "Top To Bottom") {
-          //   if (isQuestionField) {
-          //     readingDirection = "leftToRight";
-          //   } else {
-          //     readingDirection = "topToBottom";
-          //   }
-          // } else {
-          //   if (isQuestionField) {
-          //     readingDirection = "rightToLeft";
-          //   } else {
-          //     readingDirection = "bottomToTop";
-          //   }
-          // }
-          const type = data2.numericOrAlphabets;
-          // Process the data with the determined direction
+  //       if (data2) {
+  //         // Determine the reading direction
+  //         let readingDirection = "rightToLeft";
+  //         const directionMapping = {
+  //           0: "topToBottom",
+  //           1: "topToBottom",
+  //           2: "bottomToTop",
+  //           3: "bottomToTop",
+  //           4: "leftToRight",
+  //           5: "rightToLeft",
+  //           6: "leftToRight",
+  //           7: "rightToLeft",
+  //         };
+  //         readingDirection =
+  //           directionMapping[data2.iDirection] || "rightToLeft";
+  //         // if (layoutDetails.dataReadDirection === "Top To Bottom") {
+  //         //   if (isQuestionField) {
+  //         //     readingDirection = "leftToRight";
+  //         //   } else {
+  //         //     readingDirection = "topToBottom";
+  //         //   }
+  //         // } else {
+  //         //   if (isQuestionField) {
+  //         //     readingDirection = "rightToLeft";
+  //         //   } else {
+  //         //     readingDirection = "bottomToTop";
+  //         //   }
+  //         // }
+  //         const type = data2.numericOrAlphabets;
+  //         // Process the data with the determined direction
 
-          const stepInRow = data2.rowStep;
-          const stepInCol = data2.columnStep;
-          processDirection(
-            readingDirection,
-            item.startRow,
-            item.endRow,
-            item.startCol,
-            item.endCol,
-            data.numberedExcelJsonFile,
-            type,
-            stepInRow,
-            stepInCol
-          );
-        }
-      }
-    });
-  }, [
-    data.numberedExcelJsonFile,
-    selectedCoordinates,
-    dataCtx.allTemplates,
-    data.templateIndex,
-    modalUpdate,
-  ]);
+  //         const stepInRow = data2.rowStep;
+  //         const stepInCol = data2.columnStep;
+  //         processDirection(
+  //           readingDirection,
+  //           item.startRow,
+  //           item.endRow,
+  //           item.startCol,
+  //           item.endCol,
+  //           data.numberedExcelJsonFile,
+  //           type,
+  //           stepInRow,
+  //           stepInCol
+  //         );
+  //       }
+  //     }
+  //   });
+  // }, [
+  //   data.numberedExcelJsonFile,
+  //   selectedCoordinates,
+  //   dataCtx.allTemplates,
+  //   data.templateIndex,
+  //   modalUpdate,
+  // ]);
   useEffect(() => {
     const checkSizes = () => {
       const newSizes = {};
@@ -438,87 +438,84 @@ const EditDesignTemplate = () => {
 
   // }, []);
   useEffect(() => {
-      console.log("called rdf")
-      const fetchDetails = async () => {
-          try {
-              // Fetch layout data by template ID
-              const response = dataCtx.allTemplates[0];
-              console.log(response);
-            
-              setLayoutFieldData(response);
-              if (response) {
-                  // Extract data from the response
-                  const formFieldData = response?.formFieldWindowParameters ?? [];
-                  const questionField = response?.questionsWindowParameters ?? [];
-                  const skewField = response?.skewMarksWindowParameters ?? [];
-                  const idField = response?.layoutParameters ?? {};
+    console.log("called rdf");
+    const fetchDetails = async () => {
+      try {
+        // Fetch layout data by template ID
+        const response = dataCtx.allTemplates[0];
+        console.log(response);
 
-                  // Map and restructure data for coordinates
-                  const coordinateOfFormData = formFieldData.map((item) => ({
-                      ...item.formFieldCoordinates,
-                      name: item.windowName,
-                  }));
+        setLayoutFieldData(response);
+        if (response) {
+          // Extract data from the response
+          const formFieldData = response?.formFieldWindowParameters ?? [];
+          const questionField = response?.questionsWindowParameters ?? [];
+          const skewField = response?.skewMarksWindowParameters ?? [];
+          const idField = response?.layoutParameters ?? {};
 
-                  const coordinateOfQuestionField = questionField.map((item) => ({
-                      ...item.questionWindowCoordinates,
-                      name: item.windowName,
-                  }));
+          // Map and restructure data for coordinates
+          const coordinateOfFormData = formFieldData.map((item) => ({
+            ...item.Coordinate,
+            name: item.windowName,
+          }));
 
-                  const coordinateOfSkewField = skewField.map((item) => ({
-                      ...item.layoutWindowCoordinates,
-                      name: item.windowName,
-                  }));
+          const coordinateOfQuestionField = questionField.map((item) => ({
+            ...item.Coordinate,
+            name: item.windowName,
+          }));
 
-                  const coordinateOfIdField = idField.layoutCoordinates ?? [];
+          const coordinateOfSkewField = skewField.map((item) => ({
+            ...item.Coordinate,
+            name: item.windowName,
+          }));
 
-                  // Check if the start value of the ID field's coordinates is not 0
-                  const shouldIncludeIdField = coordinateOfIdField.start !== 0;
+          const coordinateOfIdField = idField.layoutCoordinates ?? [];
 
-                  // Combine all coordinates into a single array, conditionally including the ID field's coordinates
-                  const allCoordinates = [
-                      ...coordinateOfFormData,
-                      ...coordinateOfQuestionField,
-                      ...coordinateOfSkewField,
-                      ...(shouldIncludeIdField ? [coordinateOfIdField] : []), // Conditionally include the ID field's coordinates
-                  ];
+          // Combine all coordinates into a single array, conditionally including the ID field's coordinates
+          const allCoordinates = [
+            ...coordinateOfFormData,
+            ...coordinateOfQuestionField,
+            ...coordinateOfSkewField,
+            ...coordinateOfIdField,
+          ];
+          console.log(allCoordinates);
+          // Format the coordinates for the state update
+          const newSelectedFields = allCoordinates.map((item) => {
+            const {
+              "Start Row": startRow,
+              "Start Col": startCol,
+              "End Row": endRow,
+              "End Col": endCol,
+              name,
+              fieldType,
+            } = item;
+            return { startRow, startCol, endRow, endCol, name, fieldType };
+          });
+          console.log(allCoordinates);
+          // Update state with the formatted coordinates and image data
+          setSelectedCoordinates(newSelectedFields);
+          setPosition(idField?.imageCoordinates);
+        }
 
-                  // Format the coordinates for the state update
-                  const newSelectedFields = allCoordinates.map((item) => {
-                      const {
-                          start: startRow,
-                          left: startCol,
-                          end: endRow,
-                          right: endCol,
-                          name,
-                          fieldType
-                      } = item;
-                      return { startRow, startCol, endRow, endCol, name, fieldType };
-                  });
-                  console.log(newSelectedFields)
-                  // Update state with the formatted coordinates and image data
-                  setSelectedCoordinates(newSelectedFields);
-                  setPosition(idField?.imageCoordinates);
-              }
+        // const templates = await fetchAllTemplate();
+        // if (templates === undefined) {
+        //     toast.error('Error fetching templates');
 
-              // const templates = await fetchAllTemplate();
-              // if (templates === undefined) {
-              //     toast.error('Error fetching templates');
+        // }
+        // const mpObj = templates?.map((item) => {
+        //     return [{ layoutParameters: item }]
+        // });
+        // console.log(mpObj)
+        // dataCtx.addToAllTemplate(mpObj);
+      } catch (error) {
+        console.error("Error fetching layout data:", error);
+      }
+    };
 
-              // }
-              // const mpObj = templates?.map((item) => {
-              //     return [{ layoutParameters: item }]
-              // });
-              // console.log(mpObj)
-              // dataCtx.addToAllTemplate(mpObj);
-          } catch (error) {
-              console.error("Error fetching layout data:", error);
-          }
-      };
-
-      // Call the fetch details function
-      fetchDetails();
+    // Call the fetch details function
+    fetchDetails();
   }, []);
- 
+
   // *****************************************************************************************
 
   useEffect(() => {
@@ -554,8 +551,6 @@ const EditDesignTemplate = () => {
       setIdNumber(arr.join("").toString());
     }
   }, [options, selectedCol]);
-
-
 
   const handleMouseDown = (e) => {
     const boundingRect = imageRef.current.getBoundingClientRect();
@@ -965,7 +960,7 @@ const EditDesignTemplate = () => {
 
     setSelectionIndex(index);
     // console.log(data.templateIndex);
-    const template = dataCtx.allTemplates[data.templateIndex];
+    const template = dataCtx.allTemplates[0];
     // console.log(template);
     if (selectedField?.fieldType === "idField") {
       const data = template[0].layoutParameters;
@@ -1013,7 +1008,6 @@ const EditDesignTemplate = () => {
       setEndColInput(formattedSelectedFile["End Col"]);
       setReadingDirectionOption((data?.iDirection).toString());
       setType(data?.iType);
-      // setOption(data?.iOption);
       setNumberOfField(data?.totalNumberOfFields);
       setFieldType(data?.numericOrAlphabets);
       setMultiple(data?.multipleAllow);
@@ -1087,9 +1081,7 @@ const EditDesignTemplate = () => {
       setNoOfStepInCol(data?.columnStep);
     }
   };
-  console.log(
-    dataCtx.allTemplates[0].layoutParameters.layoutName
-  );
+  console.log(dataCtx.allTemplates[0].layoutParameters.layoutName);
   const handleCrossClick = (selectedField, index) => {
     const response = window.confirm(
       "Are you sure you want to delete the selected field ?"
@@ -1592,10 +1584,7 @@ const EditDesignTemplate = () => {
               <Link to="/admin/template">All Templates</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              {
-                dataCtx.allTemplates[0].layoutParameters
-                  .layoutName
-              }
+              {dataCtx.allTemplates[0].layoutParameters.layoutName}
             </li>
           </ol>
         </nav>
